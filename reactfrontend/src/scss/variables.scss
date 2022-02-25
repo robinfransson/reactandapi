@@ -1,24 +1,52 @@
+@use "sass:list";
+@use "sass:math";
+
+$breakpoints: "xl", "lg", "md", "sm", "xs";
+
 $media-xl: "only screen and (min-width: 1200px)";
 $media-desktop: "only screen and (min-width: 992px)";
 $media-tablet: "only screen and (min-width: 768px)";
 $media-mobile: "only screen and (min-width: 576px)";
 $media-mobile-sm: "only screen and (min-width : 480px)";
+$columns: 12;
+$test: "test";
 
 @mixin breakpoint($point) {
-    @if $point == desktop {
-      @media (min-width: 70em) { @content ; }
-   }
-    @else if $point == laptop {
-      @media (min-width: 64em) { @content ; }
-   }
-     @else if $point == tablet {
-      @media (min-width: 50em) { @content ; }
-   }
-    @else if $point == phablet {
-      @media (min-width: 37.5em)  { @content ; }
-   }
-   @else if $point == mobileonly {
-      @media (max-width: 37.5em)  { @content ; }
- 
-   }
- }
+  @if $point == xl {
+    @media (min-width: 70em) {
+      @content;
+    }
+  } @else if $point == lg {
+    @media (min-width: 64em) {
+      @content;
+    }
+  } @else if $point == md {
+    @media (min-width: 50em) {
+      @content;
+    }
+  } @else if $point == sm {
+    @media (min-width: 37.5em) {
+      @content;
+    }
+  } @else if $point == xs {
+    @media (max-width: 37.5em) {
+      @content;
+    }
+  }
+}
+
+@mixin col-list {
+  @each $bp in $breakpoints {
+    @for $i from 1 through $columns {
+      .col-#{$bp}-#{$i} {
+        @include breakpoint(#{$bp}) {
+          $width: math.percentage(calc(1 / $i));
+          @debug $width;
+          width: $width;
+        }
+      }
+    }
+  }
+}
+
+@include col-list();

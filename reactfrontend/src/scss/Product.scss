@@ -3,13 +3,17 @@
 .Product-container.grid {
 
     .Product {
-        width: 12rem;
-        height: 15rem;
         border-radius: 10px;
         border: 2px black solid;
         margin: 1rem;
         display: flex;
         flex-direction: column;
+
+        @include breakpoint(desktop) {
+            
+        width: 12rem;
+        height: 15rem;
+        }
 
         &-title {
             font-size: 1.5rem;
@@ -18,17 +22,11 @@
 
         &-image {
             background-position: center;
-            width: 100%;
+            width: 80%;
+            height: 80%;
             background-repeat: no-repeat;
             background-size: auto;
             align-self: center;
-
-            @include breakpoint(mobileonly) {
-                
-            height: 10rem;
-            width: 10rem;
-            }
-
         }
     }
 }
