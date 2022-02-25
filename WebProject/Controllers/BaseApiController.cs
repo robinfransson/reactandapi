@@ -7,5 +7,9 @@ namespace Backend.Controllers
     [ApiController]
     public class BaseApiController : ControllerBase
     {
+        public BaseApiController(IUserSerice userService)
+        {
+            
+        }
     }
 }

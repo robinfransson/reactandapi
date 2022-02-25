@@ -38,7 +38,7 @@ $test: "test";
 @mixin col-list {
   @each $bp in $breakpoints {
     @for $i from 1 through $columns {
-      .col-#{$bp}-#{$i} {
+      .col-#{$bp}-#{$i}of12 {
         @include breakpoint(#{$bp}) {
           $width: math.percentage(calc(1 / $i));
           @debug $width;
