@@ -1,4 +1,4 @@
-﻿namespace WebProject.Models
+﻿namespace Backend.Models
 {
     public class Product
     {

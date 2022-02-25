@@ -14,11 +14,15 @@
 .Product-container.grid .Product-image {
   background-position: center;
   width: 100%;
-  height: 10rem;
-  width: 10rem;
   background-repeat: no-repeat;
   background-size: auto;
   align-self: center;
+}
+@media (max-width: 37.5em) {
+  .Product-container.grid .Product-image {
+    height: 10rem;
+    width: 10rem;
+  }
 }
 
 .Product-container.rows {

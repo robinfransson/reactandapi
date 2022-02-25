@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Backend.Models;
 
 namespace WebProject.Models
 {
