@@ -9,7 +9,7 @@ export const Register: React.FC<{}> = () => {
   };
   return (
     <div className="Register-main">
-      <>{result && <div>{result}</div>}</>
+      <>{result && <div>{result.message}</div>}</>
       <form onSubmit={handleSubmit(onSubmit)} className="Register-form">
         <label>
           Email

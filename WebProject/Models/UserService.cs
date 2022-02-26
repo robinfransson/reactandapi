@@ -55,7 +55,6 @@ public class UserService : IUserService
         using var sha = SHA256.Create();
         var passwordBytes = sha.ComputeHash(bytes);
         var encryptedResult = Convert.ToBase64String(passwordBytes);
-
         return encryptedResult;
 
 
