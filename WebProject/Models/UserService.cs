@@ -2,6 +2,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Backend.Helpers;
 using Backend.Models.Interfaces;
 using Database;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ public class UserService : IUserService
         {
             Username = command.Username,
             Email = command.Username,
-            Password = Encrypted(command.Password)
+            Password = command.Password.Encrypt()
         });
 
         await _context.SaveChangesAsync();
@@ -47,17 +48,6 @@ public class UserService : IUserService
             Message = "User created successfully",
             Status = StatusCode.Success
         };
-    }
-
-    private string Encrypted(string entry)
-    {
-        var bytes = Encoding.UTF8.GetBytes(entry);
-        using var sha = SHA256.Create();
-        var passwordBytes = sha.ComputeHash(bytes);
-        var encryptedResult = Convert.ToBase64String(passwordBytes);
-        return encryptedResult;
-
-
     }
 
     public Task<User> Get(string username)
