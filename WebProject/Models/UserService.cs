@@ -40,6 +40,8 @@ public class UserService : IUserService
             Password = Encrypted(command.Password)
         });
 
+        await _context.SaveChangesAsync();
+
         return new UserServiceStatus()
         {
             Message = "User created successfully",

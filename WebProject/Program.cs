@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend", Version = "v1" });
 });
-builder.Services.AddDbContextFactory<LocalDbContext>();
+builder.Services.AddEntityFrameworkSqlite().AddDbContextFactory<LocalDbContext>();
 builder.Services.AddScoped<IUserService,UserService>();
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
@@ -36,6 +36,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors((policy) =>
 {
     policy.WithOrigins("http://localhost:3000");
+    policy.WithHeaders("Content-Type");
 });
 
 app.UseEndpoints(endpoints =>

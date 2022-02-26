@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Database;
 
-public class LocalDbContext : DbContext
+public sealed class LocalDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
@@ -13,10 +13,14 @@ public class LocalDbContext : DbContext
 
     public LocalDbContext()
     {
-        var path = Directory.GetCurrentDirectory();
-        DbPath = Path.Join(path, "test.db");
+        DbPath = Path.Join(@"D:\source\reactandapi\Database", "test.db");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+    }
 }

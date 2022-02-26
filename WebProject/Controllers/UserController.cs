@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backend.Controllers;
 
+[ApiController]
 public class UserController : BaseApiController<UserService>
 {
     private readonly IUserService _userService;
@@ -22,7 +23,7 @@ public class UserController : BaseApiController<UserService>
         var result = await _userService.Create(userCommand);
 
         if (result.Status == Models.StatusCode.Error)
-            return BadRequest(new {Message = result.Message});
-        return Ok(result.Message);
+            return BadRequest(result);
+        return Ok(result);
     }
 }

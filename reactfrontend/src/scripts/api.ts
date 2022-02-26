@@ -38,6 +38,9 @@ class APIRequest {
     return await fetch(`${BASE_URL}${url}`, {
       method: "Post",
       body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
     }).then((res) => res.json());
   }
 
