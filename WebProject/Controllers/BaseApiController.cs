@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace Backend.Controllers
+namespace Backend.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public abstract class BaseApiController<T> :  ControllerBase where T : class  
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BaseApiController : ControllerBase
+    private readonly ILogger<T> _logger;
+
+    protected BaseApiController(ILogger<T> logger)
     {
-        public BaseApiController(IUserSerice userService)
-        {
-            
-        }
+        _logger = logger;
     }
 }

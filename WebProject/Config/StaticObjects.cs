@@ -1,4 +1,4 @@
-﻿using WebProject.Models;
+﻿using Database;
 
 namespace WebProject.Config
 {

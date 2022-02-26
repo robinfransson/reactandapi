@@ -1,38 +1,33 @@
-﻿using Backend.Controllers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using WebProject.Models;
+using Backend.Models;
+using Database;
 using static WebProject.Config.StaticObjects;
 
-namespace Backend.Controllers
+namespace Backend.Controllers;
+
+public class HomeController : BaseApiController<HomeController>
 {
-    public class HomeController : BaseApiController
-    {
     private readonly ILogger<HomeController> _logger;
-        
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+    private readonly LocalDbContext _context;
 
-        
+    public HomeController(ILogger<HomeController> logger, LocalDbContext context) : base(logger)
+    {
+        _logger = logger;
+        _context = context;
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            return Ok(DefaultHome);
-        }
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        return Ok(DefaultHome);
+    }
 
-        [HttpGet]
-        [Route("Products")]
-        public async Task<IActionResult> GetProducts()
-        {
-            return Ok(DefaultHome.Products);
-        }
+    [HttpGet]
+    [Route("Products")]
+    public async Task<IActionResult> GetProducts()
+    {
+        return Ok(DefaultHome.Products);
     }
 }

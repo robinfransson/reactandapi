@@ -7,10 +7,9 @@ export const Products: React.FC<{ view: ViewStyle }> = ({ view }) => {
 
   React.useEffect(() => {
     const getProducts = async () => {
-      let response = await API.instance.getProducts();
+      let response = await API.getProducts();
       setProducts(response);
     };
-    console.log("products called");
     getProducts();
   }, []);
   if (products) {

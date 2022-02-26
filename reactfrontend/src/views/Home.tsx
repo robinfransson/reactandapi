@@ -10,7 +10,7 @@ export const Home = () => {
 
   React.useEffect(() => {
     const getData = async () => {
-      let response = await API.instance.getHomeData();
+      let response = await API.getHomeData();
       setHome(response);
     };
     getData();

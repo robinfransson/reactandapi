@@ -1,4 +1,4 @@
-﻿namespace Backend.Models
+﻿namespace Database
 {
     public class Product
     {

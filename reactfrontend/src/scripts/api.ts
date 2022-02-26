@@ -1,3 +1,6 @@
+import { rejects } from "assert";
+import { Url } from "url";
+
 const BASE_URL: string = "";
 
 export enum ViewStyle {
@@ -18,34 +21,59 @@ export interface ProductData {
   name: string;
 }
 
+export interface CreateUserResult {
+  message: string;
+}
+
+export interface CreateUserCommand {
+  username: string;
+  email: string;
+  password: string;
+}
+
 class APIRequest {
   constructor() {}
 
-  async getHomeData(): Promise<HomeData> {
-    try {
-      const response = await fetch(BASE_URL + "/api/Home");
-      let res = await response.json();
-      return res;
-    } catch (err) {
-      return Promise.reject();
-    }
+  async Post<T, T2>(url: string, data: T): Promise<T2> {
+    return await fetch(`${BASE_URL}${url}`, {
+      method: "Post",
+      body: JSON.stringify(data),
+    }).then((res) => res.json());
   }
-  async getProducts(): Promise<ProductData[]> {
-    try {
-      const response = await fetch(BASE_URL + "/api/Home/Products");
-      let res = await response.json();
-      console.log(res);
-      return res;
-    } catch (err) {
-      return Promise.reject();
-    }
+
+  async Get<T, T2>(path: string, data: T): Promise<T2> {
+    const params = new URLSearchParams(data ?? {}).toString();
+    const requestUrl = `${BASE_URL}${path}?${params}`;
+    return await fetch(requestUrl)
+      .then((res) => res.json())
+      .catch(Promise.reject);
+  }
+
+  async GetNoData<T>(path: string): Promise<T> {
+    const requestUrl = `${BASE_URL}${path}`;
+    return await fetch(requestUrl)
+      .then((res) => res.json())
+      .catch(Promise.reject);
   }
 }
 
 export class API {
-  private static _instance = new APIRequest();
+  private static instance = new APIRequest();
 
-  static get instance() {
-    return this._instance;
+  public static async createUser(
+    data: CreateUserCommand
+  ): Promise<CreateUserResult> {
+    return await API.instance.Post<CreateUserCommand, CreateUserResult>(
+      "/api/User/Create",
+      data
+    );
+  }
+
+  public static async getProducts(): Promise<ProductData[]> {
+    return await this.instance.GetNoData<ProductData[]>("/api/Home/Products");
+  }
+
+  public static async getHomeData(): Promise<HomeData> {
+    return await this.instance.GetNoData<HomeData>("/api/Home");
   }
 }

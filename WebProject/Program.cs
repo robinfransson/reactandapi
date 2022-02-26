@@ -1,9 +1,9 @@
 using Backend.Models;
 using Backend.Models.Interfaces;
+using Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Identity.Client;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +13,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend", Version = "v1" });
 });
-
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddDbContextFactory<LocalDbContext>();
+builder.Services.AddScoped<IUserService,UserService>();
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
