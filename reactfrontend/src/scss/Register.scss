@@ -1,0 +1,21 @@
+.Message {
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    max-width: 8rem;
+    min-height: 3rem;
+    align-content: center;
+
+    &-text {
+        width: fit-content;
+    }
+
+    &--success {
+        background-color: green;
+    }
+
+    &--error {
+        background-color: red;
+    }
+}

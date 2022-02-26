@@ -22,7 +22,8 @@ public class UserService : IUserService
     public async Task<UserServiceStatus> Create(CreateUserCommand command)
     {
         var user =
-            await _context.Users.FirstOrDefaultAsync(x => x.Username == command.Username || x.Email == command.Email);
+            await _context.Users
+                .FirstOrDefaultAsync(x => x.Username == command.Username || x.Email == command.Email);
 
         if (user is not null)
         {
@@ -68,7 +69,7 @@ public class UserService : IUserService
 
 public class UserServiceStatus
 {
-    public StatusCode Status { get; set; }
+    public StatusCode Status { get; init; }
     public string Message { get; set; }
 }
 

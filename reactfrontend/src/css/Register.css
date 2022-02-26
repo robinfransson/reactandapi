@@ -1,3 +1,20 @@
-
+.Message {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  max-width: 8rem;
+  min-height: 3rem;
+  align-content: center;
+}
+.Message-text {
+  width: fit-content;
+}
+.Message--success {
+  background-color: green;
+}
+.Message--error {
+  background-color: red;
+}
 
 /*# sourceMappingURL=Register.css.map */

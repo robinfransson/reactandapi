@@ -23,6 +23,7 @@ export interface ProductData {
 
 export interface CreateUserResult {
   message: string;
+  status: number;
 }
 
 export interface CreateUserCommand {

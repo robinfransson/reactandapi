@@ -12,6 +12,8 @@
     "@types/react-dom": "^17.0.11",
     "http-proxy-middleware": "^2.0.3",
     "jest-editor-support": "^30.0.2",
+    "postcss": "^8.4.7",
+    "postcss-scss": "^4.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.27.1",
@@ -27,7 +29,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "watch": "sass --watch src/scss:src/css",
-    "dev": "concurrently \"npm run watch\" \"npm run start\""
+    "dev": "concurrently \"npm run watch\" \"npm run start\"",
+    "stylelint-check": "stylelint-config-prettier-check"
   },
   "eslintConfig": {
     "extends": [
@@ -48,6 +51,17 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^7.0.0"
+    "concurrently": "^7.0.0",
+    "eslint": "^8.10.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1",
+    "prettier-eslint": "^13.0.0",
+    "prettier-eslint-cli": "^5.0.1",
+    "prettier-stylelint": "^0.4.2",
+    "stylelint": "^14.5.3",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-prettier": "^2.0.0",
+    "stylelint-scss": "^4.1.0",
+    "stylelint-selector-bem-pattern": "^2.1.1"
   }
 }
