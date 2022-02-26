@@ -370,18 +370,22 @@
 
 .Message {
   display: flex;
+  flex-direction: column;
   position: fixed;
-  top: 50%;
+  top: 20%;
   left: 50%;
   max-width: 8rem;
   min-height: 3rem;
   align-content: center;
   border-radius: 10px;
   border: solid black 1px;
-  padding: 1rem;
   background-color: white;
+  box-shadow: 10px rgba(0, 0, 0, 0.15);
 }
 .Message-text {
+  padding: 0.5rem;
+  align-self: center;
+  text-align: center;
   width: fit-content;
 }
 .Message--success {

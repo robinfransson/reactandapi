@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { API, CreateUserCommand, CreateUserResult } from '../scripts/api';
+import {
+    API,
+    CreateUserCommand,
+    CreateUserResult,
+    SigninUserCommand,
+} from '../scripts/api';
 import '../scss/Register.scss';
 export const Register: React.FC<{}> = () => {
     const { register, handleSubmit } = useForm<CreateUserCommand>();
@@ -17,30 +22,39 @@ export const Register: React.FC<{}> = () => {
         });
     };
     return (
-        <div className="Register-main">
-            {result && (
-                <Message
-                    message={result.message}
-                    status={result.status}
-                    delay={timeout}
-                />
-            )}
-            <form onSubmit={handleSubmit(onSubmit)} className="Register-form">
-                <label>
-                    Email
-                    <input {...register('email')}></input>
-                </label>
-                <label>
-                    Username
-                    <input {...register('username')}></input>
-                </label>
-                <label>
-                    Password
-                    <input {...register('password')}></input>
-                </label>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+        <>
+            <Login></Login>
+            <div className="Register-main">
+                {result && (
+                    <Message
+                        message={result.message}
+                        status={result.status}
+                        delay={timeout}
+                    />
+                )}
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="Register-form"
+                >
+                    <label>
+                        Email
+                        <input {...register('email')}></input>
+                    </label>
+                    <label>
+                        Username
+                        <input {...register('username')}></input>
+                    </label>
+                    <label>
+                        Password
+                        <input
+                            type="password"
+                            {...register('password')}
+                        ></input>
+                    </label>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </>
     );
 };
 interface mess {
@@ -51,7 +65,7 @@ interface mess {
 function Message(info: mess) {
     const [visible, setVisible] = React.useState<boolean>(true);
     console.table(info);
-
+    const messages = info.message.split('\n');
     React.useEffect(() => {
         setTimeout(() => {
             setVisible(false);
@@ -65,9 +79,49 @@ function Message(info: mess) {
                 info.status == 0 ? 'Message--success' : 'Message--error',
             ].join(' ')}
         >
-            {info.message}
+            {messages.map((x) => (
+                <div className="Message-text">{x}</div>
+            ))}
         </div>
     ) : (
         <></>
     );
 }
+
+export const Login: React.FC<{}> = () => {
+    const { register, handleSubmit } = useForm<SigninUserCommand>();
+    const [result, setResult] = React.useState<CreateUserResult>();
+    const timeout = 5000;
+    React.useEffect(() => {}, [result]);
+
+    const onSubmit = async (data: SigninUserCommand) => {
+        API.signinUser(data).then((res) => {
+            setResult(res);
+            setTimeout(() => {
+                setResult(undefined);
+            }, timeout);
+        });
+    };
+    return (
+        <div className="Login-main">
+            {result && (
+                <Message
+                    message={result.message}
+                    status={result.status}
+                    delay={timeout}
+                />
+            )}
+            <form onSubmit={handleSubmit(onSubmit)} className="Login-form">
+                <label>
+                    Email
+                    <input {...register('username')}></input>
+                </label>
+                <label>
+                    Password
+                    <input type="password" {...register('password')}></input>
+                </label>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    );
+};
