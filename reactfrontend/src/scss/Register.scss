@@ -1,3 +1,8 @@
+@use './variables.scss' as *;
+.Register-main {
+    @include MainContainer();
+}
+
 .Message {
     display: flex;
     position: fixed;
@@ -6,16 +11,20 @@
     max-width: 8rem;
     min-height: 3rem;
     align-content: center;
+    border-radius: 10px;
+    border: solid black 1px;
+    padding: 1rem;
+    background-color: white;
 
     &-text {
         width: fit-content;
     }
 
     &--success {
-        background-color: green;
+        color: green;
     }
 
     &--error {
-        background-color: red;
+        color: red;
     }
 }
