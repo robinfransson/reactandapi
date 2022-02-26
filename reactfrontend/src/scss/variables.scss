@@ -40,7 +40,7 @@ $test: "test";
     @for $i from 1 through $columns {
       .col-#{$bp}-#{$i}of12 {
         @include breakpoint(#{$bp}) {
-          $width: math.percentage(calc(1 / $i));
+          $width: math.percentage(calc(12 / $i * 12));
           @debug $width;
           width: $width;
         }
