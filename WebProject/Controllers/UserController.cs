@@ -38,11 +38,7 @@ public class UserController : BaseApiController<UserService>
     [HttpGet, Route("Verify"), AuthorizeUser]
     public async Task<IActionResult> VerifyToken()
     {
-        var token = Request.Headers["Auth-token"];
-        var valid =await _authService.CheckValid(token);
-
-        if (!valid)
-            return BadRequest();
+        //invalid token is caught in the AuthorizeUser attribute
         return Ok();
     }
     

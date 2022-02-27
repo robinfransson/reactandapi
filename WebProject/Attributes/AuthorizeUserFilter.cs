@@ -51,7 +51,7 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
         
     }
 
-    private void SetStatusUnauthorized(ControllerBase c)
+    private static void SetStatusUnauthorized(ControllerBase c)
     {
         c.Response.StatusCode = 401;
     }
