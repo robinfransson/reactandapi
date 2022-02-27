@@ -6,12 +6,14 @@ import {
     CreateUserResult,
     SigninUserCommand,
 } from '../scripts/api';
+import { useAuth } from '../scripts/auth';
 import '../scss/Register.scss';
 export const Register: React.FC<{}> = () => {
     const { register, handleSubmit } = useForm<CreateUserCommand>();
     const [result, setResult] = React.useState<CreateUserResult>();
     const timeout = 5000;
     React.useEffect(() => {}, [result]);
+    const { authed } = useAuth();
 
     const onSubmit = async (data: CreateUserCommand) => {
         API.createUser(data).then((res) => {
@@ -22,14 +24,9 @@ export const Register: React.FC<{}> = () => {
         });
     };
 
-    const verify = async () => {
-        await API.verify();
-    };
-
     return (
         <>
-            <button onClick={verify}>Verify token</button>
-            <Login></Login>
+            {authed ? <>Authed</> : <>Not authed</>}
             <div className="Register-main">
                 {result && (
                     <Message
@@ -81,7 +78,7 @@ function Message(info: mess) {
         <div
             className={[
                 'Message',
-                info.status == 0 ? 'Message--success' : 'Message--error',
+                info.status === 0 ? 'Message--success' : 'Message--error',
             ].join(' ')}
         >
             {messages.map((x) => (

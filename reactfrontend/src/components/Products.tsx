@@ -1,30 +1,24 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { API, ProductData, ViewStyle } from '../scripts/api';
+import { useAuth } from '../scripts/auth';
 import { Login } from '../views/Register';
 
 export const Products: React.FC<{ view: ViewStyle }> = ({ view }) => {
     const [products, setProducts] = React.useState<ProductData[]>();
     const [loggedIn, setLoggedIn] = React.useState<boolean>(false);
+    const { authed } = useAuth();
 
     React.useEffect(() => {
         const getProducts = async () => {
             let response = await API.getProducts();
             setProducts(response);
         };
-        if (loggedIn) {
+        if (authed) {
             getProducts();
         }
-    }, [loggedIn]);
-
-    React.useEffect(() => {
-        const checkStatus = async () => {
-            const authed = await API.verify();
-            setLoggedIn(authed);
-        };
-
-        checkStatus();
     }, []);
+
     if (products) {
         return (
             <div
