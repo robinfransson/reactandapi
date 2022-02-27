@@ -1,0 +1,15 @@
+.Login {
+  display: none;
+}
+.Login-active {
+  display: flex;
+  position: absolute;
+  border: 1px black solid;
+  background-color: white;
+  padding: 1rem;
+  right: 1rem;
+  top: 3rem;
+  width: 10rem;
+}
+
+/*# sourceMappingURL=Login.css.map */

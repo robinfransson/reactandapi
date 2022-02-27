@@ -9,13 +9,29 @@
     box-shadow: 0px 12px 10px -15px opacify($color: #000000, $amount: 0.5);
 
     &-login {
+        height: 100%;
         user-select: none;
-        margin-right: 2rem;
+        margin-right: 1rem;
         margin-left: auto;
 
         &:hover {
             text-decoration: underline;
             cursor: pointer;
+        }
+
+        &::after {
+            align-self: center;
+            margin-left: 1rem;
+            content: '';
+            width: 2rem;
+            height: 2rem;
+            top: 5px;
+            right: 5px;
+            position: relative;
+            display: inline-flex;
+            background: url('../icons/login-svgrepo-com.svg') no-repeat center
+                center;
+            content: '';
         }
     }
     &-logo {
@@ -23,20 +39,9 @@
         margin-left: 2rem;
     }
 
-    .Login {
-        // display: none;
-        display: none;
-
-        &-active {
-            display: flex;
-            position: absolute;
-            border: 1px black solid;
-            background-color: white;
-            padding: 1rem;
-            right: 1rem;
-            top: 3rem;
-            width: 10rem;
-        }
+    &-profile {
+        user-select: none;
+        font-size: 4rem !important;
     }
 }
 

@@ -1,23 +1,22 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { API, ProductData, ViewStyle } from '../scripts/api';
-import { useAuth } from '../scripts/auth';
-import { Login } from '../views/Register';
+import { Login } from '../components/Login';
+import { authContext } from './AuthContext';
 
 export const Products: React.FC<{ view: ViewStyle }> = ({ view }) => {
     const [products, setProducts] = React.useState<ProductData[]>();
-    const [loggedIn, setLoggedIn] = React.useState<boolean>(false);
-    const { authed } = useAuth();
+    const { authorized } = React.useContext(authContext);
 
     React.useEffect(() => {
         const getProducts = async () => {
             let response = await API.getProducts();
             setProducts(response);
         };
-        if (authed) {
+        if (authorized) {
             getProducts();
         }
-    }, []);
+    }, [authorized]);
 
     if (products) {
         return (
@@ -38,7 +37,7 @@ export const Products: React.FC<{ view: ViewStyle }> = ({ view }) => {
                 ))}
             </div>
         );
-    } else if (!loggedIn) {
+    } else if (!authorized) {
         return <Login></Login>;
     }
     return <></>;

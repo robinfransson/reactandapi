@@ -1,3 +1,7 @@
+import React from 'react';
+import { authContext } from '../components/AuthContext';
+import { useAuth } from './auth';
+
 const BASE_URL: string = '';
 
 export enum ViewStyle {
@@ -21,6 +25,7 @@ export interface ProductData {
 export interface CreateUserResult {
     message: string;
     status: number;
+    token?: string | null;
 }
 
 export interface CreateUserCommand {
@@ -78,7 +83,6 @@ class APIRequest {
                 headers: [['Auth-token', token!]],
             });
             if (response.status === 200) {
-                console.log('user is authenticated');
                 return true;
             } else if (response.status === 401) {
                 console.log('user is not authenticated');
@@ -109,10 +113,13 @@ export class API {
     public static async signinUser(
         data: SigninUserCommand
     ): Promise<CreateUserResult> {
-        return await API.instance.Post<SigninUserCommand, CreateUserResult>(
-            '/api/User/Signin',
-            data
-        );
+        return {
+            ...(await API.instance.Post<SigninUserCommand, CreateUserResult>(
+                '/api/User/Signin',
+                data
+            )),
+            token: sessionStorage.getItem('token'),
+        };
     }
 
     public static async getProducts(): Promise<ProductData[]> {

@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
+import { authContext } from '../components/AuthContext';
 import {
     API,
     CreateUserCommand,
     CreateUserResult,
     SigninUserCommand,
 } from '../scripts/api';
-import { useAuth } from '../scripts/auth';
 import '../scss/Register.scss';
+
 export const Register: React.FC<{}> = () => {
     const { register, handleSubmit } = useForm<CreateUserCommand>();
     const [result, setResult] = React.useState<CreateUserResult>();
     const timeout = 5000;
     React.useEffect(() => {}, [result]);
-    const { authed } = useAuth();
+    const { authorized } = React.useContext(authContext);
 
     const onSubmit = async (data: CreateUserCommand) => {
         API.createUser(data).then((res) => {
@@ -26,7 +27,7 @@ export const Register: React.FC<{}> = () => {
 
     return (
         <>
-            {authed ? <>Authed</> : <>Not authed</>}
+            {authorized ? <>Authed</> : <>Not authed</>}
             <div className="Register-main">
                 {result && (
                     <Message
@@ -65,14 +66,14 @@ interface mess {
     status: number;
     delay: number;
 }
-function Message(info: mess) {
+export function Message(info: mess) {
     const [visible, setVisible] = React.useState<boolean>(true);
     const messages = info.message.split('\n');
     React.useEffect(() => {
         setTimeout(() => {
             setVisible(false);
         }, info.delay);
-    });
+    }, [info.delay]);
 
     return visible ? (
         <div
@@ -81,49 +82,13 @@ function Message(info: mess) {
                 info.status === 0 ? 'Message--success' : 'Message--error',
             ].join(' ')}
         >
-            {messages.map((x) => (
-                <div className="Message-text">{x}</div>
+            {messages.map((x, index) => (
+                <div key={index} className="Message-text">
+                    {x}
+                </div>
             ))}
         </div>
     ) : (
         <></>
     );
 }
-
-export const Login: React.FC<{}> = () => {
-    const { register, handleSubmit } = useForm<SigninUserCommand>();
-    const [result, setResult] = React.useState<CreateUserResult>();
-    const timeout = 5000;
-    React.useEffect(() => {}, [result]);
-
-    const onSubmit = async (data: SigninUserCommand) => {
-        API.signinUser(data).then((res) => {
-            setResult(res);
-            setTimeout(() => {
-                setResult(undefined);
-            }, timeout);
-        });
-    };
-    return (
-        <div className="Login-main">
-            {result && (
-                <Message
-                    message={result.message}
-                    status={result.status}
-                    delay={timeout}
-                />
-            )}
-            <form onSubmit={handleSubmit(onSubmit)} className="Login-form">
-                <label>
-                    Email
-                    <input {...register('username')}></input>
-                </label>
-                <label>
-                    Password
-                    <input type="password" {...register('password')}></input>
-                </label>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-    );
-};
