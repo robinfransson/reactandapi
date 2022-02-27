@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Attributes;
 using Backend.Helpers;
 using Backend.Models;
 using Backend.Models.Interfaces;
@@ -34,8 +35,7 @@ public class UserController : BaseApiController<UserService>
     }
 
 
-    [HttpGet]
-    [Route("Verify")]
+    [HttpGet, Route("Verify"), AuthorizeUser]
     public async Task<IActionResult> VerifyToken()
     {
         var token = Request.Headers["Auth-token"];
