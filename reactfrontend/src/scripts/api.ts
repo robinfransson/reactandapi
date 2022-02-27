@@ -70,7 +70,7 @@ class APIRequest {
             .catch(Promise.reject);
     }
 
-    async VerifyToken() {
+    async VerifyToken(): Promise<boolean> {
         if (sessionStorage.getItem('token') != null) {
             const token = sessionStorage.getItem('token') ?? undefined;
             const response = await fetch(`${BASE_URL}/api/User/Verify`, {
@@ -79,20 +79,22 @@ class APIRequest {
             });
             if (response.status === 200) {
                 console.log('user is authenticated');
+                return true;
             } else if (response.status === 401) {
                 console.log('user is not authenticated');
             } else {
                 console.log('another error was caught: ', response.status);
             }
         }
+        return false;
     }
 }
 
 export class API {
     private static instance = new APIRequest();
 
-    public static async verify() {
-        await API.instance.VerifyToken();
+    public static async verify(): Promise<boolean> {
+        return await API.instance.VerifyToken();
     }
 
     public static async createUser(

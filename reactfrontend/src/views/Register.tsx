@@ -75,7 +75,7 @@ function Message(info: mess) {
         setTimeout(() => {
             setVisible(false);
         }, info.delay);
-    }, [visible]);
+    });
 
     return visible ? (
         <div
