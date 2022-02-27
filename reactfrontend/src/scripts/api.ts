@@ -48,9 +48,6 @@ class APIRequest {
                 'Access-Control-Allow-Origin': '*',
             },
         }).then((res) => {
-            res.headers.forEach((val, name) => {
-                console.log(`${name}, ${val}`);
-            });
             if (res.headers.get('Auth-token')) {
                 window.sessionStorage.setItem(
                     'token',
