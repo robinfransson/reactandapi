@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Backend.Helpers;
 using Backend.Models;
 using Backend.Models.Interfaces;
+using Backend.Services;
 using Backend.Validators;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,10 +14,12 @@ namespace Backend.Controllers;
 public class UserController : BaseApiController<UserService>
 {
     private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-    public UserController(IUserService userService, ILogger<UserService> logger) : base(logger)
+    public UserController(IUserService userService, IAuthService authService, ILogger<UserService> logger) : base(logger)
     {
         _userService = userService;
+        _authService = authService;
     }
 
     [HttpPost]
@@ -28,6 +32,19 @@ public class UserController : BaseApiController<UserService>
             return BadRequest(result);
         return Ok(result);
     }
+
+
+    [HttpGet]
+    [Route("Verify")]
+    public async Task<IActionResult> VerifyToken()
+    {
+        var token = Request.Headers["Auth-token"];
+        var valid =await _authService.CheckValid(token);
+
+        if (!valid)
+            return BadRequest();
+        return Ok();
+    }
     
     [HttpPost]
     [Route("Signin")]
@@ -37,7 +54,17 @@ public class UserController : BaseApiController<UserService>
         
         if(result.Status == Models.StatusCode.Error)
             return BadRequest(result);
-        
+
+        var token = await _authService.GenerateAuthToken(authenticateUserCommand.Username);
+
+        if (token is null)
+            return BadRequest(new UserServiceStatus
+            {
+                Message = "Internal server error.",
+                Status = Models.StatusCode.Error
+            });
+        Response.Headers.Add("Auth-token",token.Token);
+        Response.Headers.Add("Access-Control-Expose-Headers", "Auth-token");
         return Ok(result);
     }
 }

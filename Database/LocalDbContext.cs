@@ -7,7 +7,7 @@ public sealed class LocalDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
-    public DbSet<UserAuthentication> UserAuthentications { get; set; }
+    public DbSet<AuthToken> AuthTokens { get; set; }
 
     private string DbPath { get; }
 

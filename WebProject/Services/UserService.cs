@@ -1,19 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Backend.Helpers;
+using Backend.Models;
 using Backend.Models.Interfaces;
 using Backend.Validators;
 using Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Models;
+namespace Backend.Services;
 
 public class UserService : IUserService
 {
@@ -58,7 +54,7 @@ public class UserService : IUserService
         await _context.Users.AddAsync(new User()
         {
             Username = command.Username,
-            Email = command.Username,
+            Email = command.Email,
             Password = command.Password.Encrypt()
         });
 
@@ -109,7 +105,7 @@ public class UserService : IUserService
 
     public async Task<UserServiceStatus> SignIn(AuthenticateUserCommand command)
     {
-        var user = await GetByUsername(command.Username) ?? await GetByEmail(command.Email);
+        var user = await GetByUsername(command.Username) ?? await GetByEmail(command.Username);
         if (user is null)
         {
             return new UserServiceStatus()
@@ -135,23 +131,4 @@ public class UserService : IUserService
         }; 
         
     }
-}
-
-public class AuthenticateUserCommand
-{
-    public string Username { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-}
-
-public class UserServiceStatus
-{
-    public StatusCode Status { get; init; }
-    public string Message { get; set; }
-}
-
-public enum StatusCode
-{
-    Success = 0,
-    Error = 1
 }

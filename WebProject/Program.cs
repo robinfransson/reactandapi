@@ -1,5 +1,6 @@
 using Backend.Models;
 using Backend.Models.Interfaces;
+using Backend.Services;
 using Backend.Validators;
 using Database;
 using FluentValidation;
@@ -19,7 +20,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddEntityFrameworkSqlite().AddDbContextFactory<LocalDbContext>();
 
 builder.Services.AddTransient<CreateUserValidator>();
-builder.Services.AddTransient<IUserService,UserService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddFluentValidation();
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
@@ -42,7 +44,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors((policy) =>
 {
     policy.WithOrigins("http://localhost:3000");
-    policy.WithHeaders("Content-Type");
+    policy.WithHeaders("Content-Type")
+        .WithHeaders("Auth-token").WithHeaders("Access-Control-Allow-Origin");
 });
 
 app.UseEndpoints(endpoints =>

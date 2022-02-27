@@ -21,8 +21,15 @@ export const Register: React.FC<{}> = () => {
             }, timeout);
         });
     };
+
+    const verify = async () => {
+        console.log('invoked');
+        await API.verify();
+    };
+
     return (
         <>
+            <button onClick={verify}>Verify token</button>
             <Login></Login>
             <div className="Register-main">
                 {result && (
@@ -64,7 +71,6 @@ interface mess {
 }
 function Message(info: mess) {
     const [visible, setVisible] = React.useState<boolean>(true);
-    console.table(info);
     const messages = info.message.split('\n');
     React.useEffect(() => {
         setTimeout(() => {

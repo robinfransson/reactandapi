@@ -45,8 +45,20 @@ class APIRequest {
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             },
-        }).then((res) => res.json());
+        }).then((res) => {
+            res.headers.forEach((val, name) => {
+                console.log(`${name}, ${val}`);
+            });
+            if (res.headers.get('Auth-token')) {
+                window.sessionStorage.setItem(
+                    'token',
+                    res.headers.get('Auth-token') ?? ''
+                );
+            }
+            return res.json();
+        });
     }
 
     async Get<T, T2>(path: string, data: T): Promise<T2> {
@@ -63,10 +75,27 @@ class APIRequest {
             .then((res) => res.json())
             .catch(Promise.reject);
     }
+
+    async VerifyToken() {
+        if (sessionStorage.getItem('token') != null) {
+            const token = sessionStorage.getItem('token') ?? undefined;
+            return await fetch(`${BASE_URL}/api/User/Verify`, {
+                method: 'GET',
+                headers: [['Auth-token', token!]],
+            });
+        }
+    }
 }
 
 export class API {
     private static instance = new APIRequest();
+
+    public static async verify() {
+        console.log('invoked');
+        const response = await API.instance.VerifyToken();
+        if (response?.ok) return;
+        if (response?.status === 404) return;
+    }
 
     public static async createUser(
         data: CreateUserCommand
