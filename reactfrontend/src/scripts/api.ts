@@ -1,6 +1,3 @@
-import { rejects } from 'assert';
-import { Url } from 'url';
-
 const BASE_URL: string = '';
 
 export enum ViewStyle {
@@ -82,8 +79,10 @@ class APIRequest {
             });
             if (response.status === 200) {
                 console.log('user is authenticated');
-            } else if (response.status === 400) {
+            } else if (response.status === 401) {
                 console.log('user is not authenticated');
+            } else {
+                console.log('another error was caught: ', response.status);
             }
         }
     }
