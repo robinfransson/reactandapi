@@ -42,7 +42,8 @@ public class AuthService : IAuthService
             
         };
 
-        _context.AuthTokens.Add(tokenObject);
+        await _context.AuthTokens.AddAsync(tokenObject);
+        await _context.SaveChangesAsync();
 
         return tokenObject;
 

@@ -23,7 +23,6 @@ export const Register: React.FC<{}> = () => {
     };
 
     const verify = async () => {
-        console.log('invoked');
         await API.verify();
     };
 

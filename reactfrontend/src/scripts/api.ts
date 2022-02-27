@@ -79,10 +79,15 @@ class APIRequest {
     async VerifyToken() {
         if (sessionStorage.getItem('token') != null) {
             const token = sessionStorage.getItem('token') ?? undefined;
-            return await fetch(`${BASE_URL}/api/User/Verify`, {
+            const response = await fetch(`${BASE_URL}/api/User/Verify`, {
                 method: 'GET',
                 headers: [['Auth-token', token!]],
             });
+            if (response.status === 200) {
+                console.log('user is authenticated');
+            } else if (response.status === 400) {
+                console.log('user is not authenticated');
+            }
         }
     }
 }
@@ -91,10 +96,7 @@ export class API {
     private static instance = new APIRequest();
 
     public static async verify() {
-        console.log('invoked');
-        const response = await API.instance.VerifyToken();
-        if (response?.ok) return;
-        if (response?.status === 404) return;
+        await API.instance.VerifyToken();
     }
 
     public static async createUser(
