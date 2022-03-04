@@ -89,11 +89,11 @@ class APIRequest {
     }
 
     async VerifyToken(): Promise<boolean> {
-        if (sessionStorage.getItem('token') != null) {
-            const token = sessionStorage.getItem('token') ?? undefined;
+        if (sessionStorage.getItem('token')) {
+            const token = sessionStorage.getItem('token');
             const response = await fetch(`${BASE_URL}/api/User/Verify`, {
                 method: 'GET',
-                headers: [['Auth-token', token!]],
+                headers: [['Auth-token', token ?? '']],
             });
             if (response.status === 200) {
                 return true;
@@ -146,6 +146,6 @@ export class API {
     }
 
     public static async addRole(): Promise<HomeData> {
-        return await API.instance.GetNoData<HomeData>('/api/User/AddRole');
+        return await API.instance.GetNoData<any>('/api/User/AddRole');
     }
 }

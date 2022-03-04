@@ -6,7 +6,7 @@ export const ProfileMenu = () => {
     const { authorized, setToken } = useContext(authContext);
 
     const logClick = () => {
-        setToken!(undefined);
+        setToken!('');
         window.sessionStorage.setItem('token', '');
         console.log('clicked');
     };

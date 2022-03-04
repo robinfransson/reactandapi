@@ -15,8 +15,8 @@ export const Login: React.FC<{}> = () => {
     const onSubmit = async (data: SigninUserCommand) => {
         API.signinUser(data).then((res) => {
             setResult(res);
+            setToken!(res.token ?? undefined);
             setTimeout(() => {
-                setToken!(res.token ?? undefined);
                 setResult(undefined);
             }, timeout + 100);
         });
