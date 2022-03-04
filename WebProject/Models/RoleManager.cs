@@ -35,7 +35,7 @@ public class RoleManager : IRoleManager
 
         if (role is null)
         {
-            _logger.LogInformation($"The role {roleName} does not exist.");
+            _logger.LogInformation($"The role does not exist.");
             return;
         }
         
@@ -49,7 +49,7 @@ public class RoleManager : IRoleManager
     {
         var role = await _context.Roles.Include(x => x.Users).FirstOrDefaultAsync(x => x.Name == roleName);
         if(role is null)
-            _logger.LogError($"The role {roleName} does not exist!");
+            _logger.LogError($"The role does not exist!");
         
         role?.Users.Add(user);
         await _context.SaveChangesAsync();
@@ -59,7 +59,7 @@ public class RoleManager : IRoleManager
     {
         var role = await _context.Roles.Include(x => x.Users).FirstOrDefaultAsync(x => x.Name == roleName);
         if(role is null)
-            _logger.LogError($"The role {roleName} does not exist!");
+            _logger.LogError("The role does not exist!");
         
         role?.Users.Remove(user);
     }
