@@ -47,7 +47,7 @@ public class RoleManager : IRoleManager
 
     public async Task AddUserToRole(User user, string roleName)
     {
-        var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == roleName);
+        var role = await _context.Roles.Include(x => x.Users).FirstOrDefaultAsync(x => x.Name == roleName);
         if(role is null)
             _logger.LogError($"The role {roleName} does not exist!");
         
@@ -57,7 +57,7 @@ public class RoleManager : IRoleManager
 
     public async Task RemoveUserFromRole(User user, string roleName)
     {
-        var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == roleName);
+        var role = await _context.Roles.Include(x => x.Users).FirstOrDefaultAsync(x => x.Name == roleName);
         if(role is null)
             _logger.LogError($"The role {roleName} does not exist!");
         
