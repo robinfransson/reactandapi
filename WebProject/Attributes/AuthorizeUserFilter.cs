@@ -48,9 +48,12 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
 
     private bool CheckIfAuthorized(User user, IAuthService authService)
     {
-        if (Roles is null || !Roles.Any() || user is null)
-            return true;
+        if (user is null)
+            return false;
         
+        if (Roles is null || !Roles.Any() || Roles.All(string.IsNullOrWhiteSpace))
+            return true;
+
         return Roles.Any(x => authService.IsInRole(user, x));
     }
 
