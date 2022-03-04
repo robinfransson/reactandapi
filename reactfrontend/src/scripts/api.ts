@@ -83,14 +83,9 @@ class APIRequest {
     }
 
     async HandleResponse<T>(response: Response): Promise<any> {
-        console.log(response);
-        if (response.status === 401) {
-            var mess = await response.json();
-            message({ ...mess, delay: 3000 });
-            return {} as T;
-        }
-
-        return response.json();
+        var mess = await response.json();
+        message({ ...mess, delay: 3000 });
+        return mess;
     }
 
     async VerifyToken(): Promise<boolean> {
