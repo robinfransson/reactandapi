@@ -1,9 +1,8 @@
-using Backend.Models;
+using Backend.Helpers;
 using Backend.Models.Interfaces;
 using Backend.Services;
 using Backend.Validators;
 using Database;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,25 +10,30 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
+
+
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend", Version = "v1" });
 });
-builder.Services.AddEntityFrameworkSqlite().AddDbContextFactory<LocalDbContext>();
+builder.Services.AddEntityFrameworkSqlite()
+                .AddDbContextFactory<LocalDbContext>();
 
 builder.Services.AddTransient<CreateUserValidator>();
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddFluentValidation();
+
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -45,7 +49,8 @@ app.UseCors((policy) =>
 {
     policy.WithOrigins("http://localhost:3000");
     policy.WithHeaders("Content-Type")
-        .WithHeaders("Auth-token").WithHeaders("Access-Control-Allow-Origin");
+          .WithHeaders("Auth-token")
+          .WithHeaders("Access-Control-Allow-Origin");
 });
 
 app.UseEndpoints(endpoints =>

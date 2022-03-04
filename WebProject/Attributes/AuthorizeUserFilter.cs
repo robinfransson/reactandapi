@@ -1,9 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Backend.Controllers;
 using Backend.Models.Interfaces;
+using Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -13,46 +15,46 @@ namespace Backend.Attributes;
 [AttributeUsage(AttributeTargets.Method)]
 public class AuthorizeUserAttribute : ActionFilterAttribute
 {
+
+    public string[] Roles { get; set; } 
+    
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        if (!ValidContext(context))
-        {
-            if (context.Controller is ControllerBase c)
-            {
-                SetStatusUnauthorized(c);
-            }
+        if (context.Controller is not ControllerBase)
             return;
-        }
+
         
-        if (context.Controller is ControllerBase controller &&
-            context.HttpContext.RequestServices.GetService(typeof(IAuthService)) is IAuthService authService)
+        if (context.HttpContext.RequestServices.GetService(typeof(IAuthService)) is IAuthService authService &&
+            context.HttpContext.RequestServices.GetService(typeof(IUserService)) is IUserService)
         {
-            
-            var authToken = controller.Request.Headers["Auth-token"];
+            var authToken = context.HttpContext.Request.Headers["Auth-token"];
             var validToken = await authService.CheckValid(authToken);
-            if (!validToken)
+
+            var user = await authService.GetAuthenticatedUser(authToken);
+
+            var authorized = CheckIfAuthorized(user, authService);
+            
+            if (!validToken || !authorized)
             {
-                SetStatusUnauthorized(controller);
-                return;
+                await SetStatusUnauthorized(context.Controller as ControllerBase);
             }
         }
-        
-
     }
 
-    private static bool ValidContext(ActionExecutingContext context)
+    private bool CheckIfAuthorized(User user, IAuthService authService)
     {
-        if (context.Controller is not ControllerBase controller)
-            return false;
-
-        var authToken = controller.Request.Headers["Auth-token"];
+        if (Roles is null || !Roles.Any())
+            return true;
         
-        return authToken.Any();
-        
+        return Roles.Any(x => authService.IsInRole(user, x));
     }
 
-    private static void SetStatusUnauthorized(ControllerBase c)
+    private async Task SetStatusUnauthorized(ControllerBase c)
     {
+        if (Roles is not null)
+        {
+            await c.Response.WriteAsJsonAsync(new { Message = "Not authorized to view this content."});
+        }
         c.Response.StatusCode = 401;
     }
 }

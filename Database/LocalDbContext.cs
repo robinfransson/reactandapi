@@ -6,7 +6,7 @@ namespace Database;
 public sealed class LocalDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
-    public DbSet<Product> Products { get; set; }
+    public DbSet<Role> Roles { get; set; }
     public DbSet<AuthToken> AuthTokens { get; set; }
 
     private string DbPath { get; }

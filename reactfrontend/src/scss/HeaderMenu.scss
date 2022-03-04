@@ -1,4 +1,5 @@
 .HeaderMenu {
+    position: fixed;
     display: flex;
     align-items: center;
     font-size: 2rem;
@@ -29,8 +30,7 @@
             right: 5px;
             position: relative;
             display: inline-flex;
-            background: url('../icons/login-svgrepo-com.svg') no-repeat center
-                center;
+            background: url('../icons/login.svg') no-repeat center center;
             content: '';
         }
     }

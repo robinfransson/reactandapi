@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { API, CreateUserResult, SigninUserCommand } from '../scripts/api';
-import { Message } from '../views/Register';
+import { message } from '../views/Register';
 import { authContext } from './AuthContext';
 import '../scss/Login.scss';
 
@@ -16,36 +16,38 @@ export const Login: React.FC<{}> = () => {
         API.signinUser(data).then((res) => {
             setResult(res);
             setTimeout(() => {
-                setToken!(res.token!);
+                setToken!(res.token ?? undefined);
                 setResult(undefined);
             }, timeout + 100);
         });
     };
     if (!authorized) {
         return (
-            <div className="Login-main">
-                {result && (
-                    <Message
-                        message={result.message}
-                        status={result.status}
-                        delay={timeout}
-                    />
-                )}
-                <form onSubmit={handleSubmit(onSubmit)} className="Login-form">
-                    <label>
-                        Email
-                        <input {...register('username')}></input>
-                    </label>
-                    <label>
-                        Password
-                        <input
-                            type="password"
-                            {...register('password')}
-                        ></input>
-                    </label>
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
+            <>
+                <div className="Login-main">
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="Login-form"
+                    >
+                        <div className="Form-group">
+                            <div className="Form-label">Email</div>
+                            <input
+                                className="Form-input"
+                                {...register('username')}
+                            ></input>
+                        </div>
+                        <div className="Form-group">
+                            <div className="Form-label">Password</div>
+                            <input
+                                className="Form-input"
+                                type="password"
+                                {...register('password')}
+                            ></input>
+                        </div>
+                        <button type="submit">Log in</button>
+                    </form>
+                </div>
+            </>
         );
     } else {
         return <></>;

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Backend.Helpers;
 using Backend.Models.Interfaces;
@@ -12,14 +14,23 @@ public class AuthService : IAuthService
     private readonly IUserService _userService;
     private readonly LocalDbContext _context;
 
+    public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
+
+    private List<Role> _roles;
     
     public AuthService(IUserService userService, LocalDbContext context)
     {
         _userService = userService;
         _context = context;
+        _roles = _context.Roles.Include("Users").ToList();
     }
-    
-    
+
+
+    public bool IsInRole(User user, string role)
+    {
+        return Roles.First(x => x.Name == role).Users.Contains(user);
+    }
+
     public async Task<AuthToken> GenerateAuthToken(string username)
     {
         var user = await _userService.GetByUsername(username) ?? await _userService.GetByEmail(username);
@@ -67,4 +78,17 @@ public class AuthService : IAuthService
         await _context.SaveChangesAsync();
 
     }
+
+    public async Task<User> GetAuthenticatedUser(string token)
+    {
+        var validToken = await CheckValid(token);
+
+        if (!validToken)
+            return null;
+
+        var tokenObject = await _context.AuthTokens.FirstAsync(x => x.Token == token);
+
+        return await _userService.GetByGuid(tokenObject.UserGuid);
+    }
 }
+

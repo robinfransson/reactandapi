@@ -33,10 +33,18 @@ public class UserController : BaseApiController<UserService>
             return BadRequest(result);
         return Ok(result);
     }
-
+    
+    
+    
+    [HttpGet, Route("AddRole"), AuthorizeUser(Roles = new []{ "Admin" })]
+    public IActionResult AddRole()
+    {
+        return Ok();
+    }
+    
 
     [HttpGet, Route("Verify"), AuthorizeUser]
-    public async Task<IActionResult> VerifyToken()
+    public IActionResult VerifyToken()
     {
         //invalid token is caught in the AuthorizeUser attribute
         return Ok();

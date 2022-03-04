@@ -3,20 +3,35 @@
     @include MainContainer();
 }
 
+.Message-container {
+    display: inline;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+
+    &:empty {
+        position: absolute;
+        top: -10000;
+        left: -10000;
+    }
+}
+
 .Message {
     font-size: 1rem;
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    max-width: 8rem;
+    position: relative;
+    max-width: 12rem;
     min-height: 3rem;
     align-content: center;
     border-radius: 10px;
     border: solid black 1px;
     background-color: white;
     box-shadow: 10px rgba(0, 0, 0, 0.15);
+    animation-name: example;
+    animation-duration: 3s;
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    opacity: 0;
 
     &-text {
         padding: 0.5rem;
@@ -31,5 +46,26 @@
 
     &--error {
         color: red;
+    }
+}
+
+@keyframes example {
+    0% {
+        opacity: 0;
+        top: 30px;
+    }
+    25% {
+        opacity: 1;
+        top: 30px;
+    }
+    50% {
+        opacity: 0.9;
+    }
+    99% {
+        top: -200px;
+        opacity: 0;
+    }
+    100% {
+        display: none;
     }
 }

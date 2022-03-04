@@ -7,7 +7,12 @@ export function useAuth() {
 
     useEffect(() => {
         API.verify().then((x) => setAuthed(x));
+        console.log('token changed');
     }, [token]);
+
+    useEffect(() => {
+        console.log('authorized changed');
+    }, [authorized]);
 
     return { authorized, setToken };
 }

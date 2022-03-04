@@ -1,4 +1,6 @@
+import { messageTypes } from 'jest-editor-support';
 import * as React from 'react';
+import ReactDOM from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { authContext } from '../components/AuthContext';
 import {
@@ -13,8 +15,18 @@ export const Register: React.FC<{}> = () => {
     const { register, handleSubmit } = useForm<CreateUserCommand>();
     const [result, setResult] = React.useState<CreateUserResult>();
     const timeout = 5000;
-    React.useEffect(() => {}, [result]);
-    const { authorized } = React.useContext(authContext);
+    React.useEffect(() => {
+        if (result) {
+            const m: mess = {
+                message: result!.message,
+                status: result!.status,
+                delay: timeout,
+            };
+            console.log('authorized, message?');
+            message(m);
+        }
+    }, [result]);
+    const { authorized, setToken } = React.useContext(authContext);
 
     const onSubmit = async (data: CreateUserCommand) => {
         API.createUser(data).then((res) => {
@@ -29,13 +41,6 @@ export const Register: React.FC<{}> = () => {
         <>
             {authorized ? <>Authed</> : <>Not authed</>}
             <div className="Register-main">
-                {result && (
-                    <Message
-                        message={result.message}
-                        status={result.status}
-                        delay={timeout}
-                    />
-                )}
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="Register-form"
@@ -66,29 +71,25 @@ interface mess {
     status: number;
     delay: number;
 }
-export function Message(info: mess) {
-    const [visible, setVisible] = React.useState<boolean>(true);
+export function message(info: mess) {
+    const messageContainer = document.querySelector('.Message-container')!;
     const messages = info.message.split('\n');
-    React.useEffect(() => {
-        setTimeout(() => {
-            setVisible(false);
-        }, info.delay);
-    }, [info.delay]);
-
-    return visible ? (
-        <div
-            className={[
-                'Message',
-                info.status === 0 ? 'Message--success' : 'Message--error',
-            ].join(' ')}
-        >
-            {messages.map((x, index) => (
-                <div key={index} className="Message-text">
-                    {x}
-                </div>
-            ))}
-        </div>
-    ) : (
-        <></>
+    const message = document.createElement('div');
+    console.log(messages);
+    message.classList.add(
+        'Message',
+        info.status === 0 ? 'Message--success' : 'Message--error'
     );
+    messages.forEach((x, index) => {
+        const child = document.createElement('div');
+        child.classList.add('Message-text');
+        child.innerHTML = x;
+        message.appendChild(child);
+    });
+
+    messageContainer.appendChild(message);
+
+    setTimeout(() => {
+        message.remove();
+    }, info.delay);
 }
