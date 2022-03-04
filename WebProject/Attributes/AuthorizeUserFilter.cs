@@ -19,6 +19,7 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
 
     public string[] Roles { get; set; } 
     
+    
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         if (context.Controller is not ControllerBase)
@@ -31,8 +32,11 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
             var authToken = context.HttpContext.Request.Headers["Auth-token"];
 
             if (string.IsNullOrWhiteSpace(authToken))
+            {
                 await SetStatusUnauthorized(context.Controller as ControllerBase);
-            
+                return;
+            }
+                
             var validToken = await authService.CheckValid(authToken);
 
             var user = await authService.GetAuthenticatedUser(authToken);
@@ -44,6 +48,8 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
                 await SetStatusUnauthorized(context.Controller as ControllerBase);
             }
         }
+
+        await next();
     }
 
     private bool CheckIfAuthorized(User user, IAuthService authService)

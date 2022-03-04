@@ -39,7 +39,12 @@ public class UserController : BaseApiController<UserService>
     [HttpGet, Route("AddRole"), AuthorizeUser(Roles = new []{ "Admin" })]
     public IActionResult AddRole()
     {
-        return Ok();
+        Logger.LogInformation("Added role");
+        return Ok(new UserServiceStatus()
+        {
+            Message = "You are authorized",
+            Status = Models.StatusCode.Success
+        });
     }
     
 

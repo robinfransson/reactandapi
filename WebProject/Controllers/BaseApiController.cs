@@ -7,10 +7,10 @@ namespace Backend.Controllers;
 [ApiController]
 public abstract class BaseApiController<T> :  ControllerBase where T : class  
 {
-    private readonly ILogger<T> _logger;
+    protected readonly ILogger<T> Logger;
 
     protected BaseApiController(ILogger<T> logger)
     {
-        _logger = logger;
+        Logger = logger;
     }
 }
