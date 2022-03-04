@@ -43,13 +43,15 @@ export interface SigninUserCommand {
 class APIRequest {
     constructor() {}
 
-    private baseRequest: RequestInit = {
-        headers: [['Auth-token', sessionStorage.getItem('token') ?? '']],
-    };
+    private baseRequest() {
+        return {
+            headers: [['Auth-token', sessionStorage.getItem('token') ?? '']],
+        };
+    }
 
     async Post<T, T2>(url: string, data: T): Promise<T2> {
         return await fetch(`${BASE_URL}${url}`, {
-            ...this.baseRequest,
+            ...this.baseRequest(),
             method: 'Post',
             body: JSON.stringify(data),
             headers: {
@@ -58,7 +60,7 @@ class APIRequest {
             },
         }).then((res) => {
             if (res.headers.get('Auth-token')) {
-                window.sessionStorage.setItem(
+                sessionStorage.setItem(
                     'token',
                     res.headers.get('Auth-token') ?? ''
                 );
@@ -70,19 +72,24 @@ class APIRequest {
     async Get<T, T2>(path: string, data: T): Promise<T2> {
         const params = new URLSearchParams(data ?? {}).toString();
         const requestUrl = `${BASE_URL}${path}?${params}`;
-        return await fetch(requestUrl, this.baseRequest)
+        return await fetch(requestUrl, this.baseRequest())
             .then(this.HandleResponse)
             .catch(Promise.reject);
     }
 
     async GetNoData<T>(path: string): Promise<T> {
         const requestUrl = `${BASE_URL}${path}`;
-        return await fetch(requestUrl, this.baseRequest).then(
+        return await fetch(requestUrl, this.baseRequest()).then(
             this.HandleResponse
         );
     }
 
     async HandleResponse<T>(response: Response): Promise<any> {
+        console.log('reached here');
+        if (response.status === 401) {
+            message({ message: 'Not authorized', delay: 3000, status: 1 });
+            return {};
+        }
         var mess = await response.json();
         message({ ...mess, delay: 3000 });
         return mess;
