@@ -1,4 +1,5 @@
 using Backend.Helpers;
+using Backend.Models;
 using Backend.Models.Interfaces;
 using Backend.Services;
 using Backend.Validators;
@@ -23,6 +24,8 @@ builder.Services.AddEntityFrameworkSqlite()
 builder.Services.AddTransient<CreateUserValidator>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IRoleManager, RoleManager>();
+
 builder.Services.AddFluentValidation();
 
 var app = builder.Build();
