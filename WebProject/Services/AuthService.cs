@@ -14,7 +14,7 @@ public class AuthService : IAuthService
     private readonly IUserService _userService;
     private readonly LocalDbContext _context;
 
-    public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
+    public IEnumerable<Role> Roles => _roles.AsReadOnly();
 
     private List<Role> _roles;
     
@@ -28,7 +28,7 @@ public class AuthService : IAuthService
 
     public bool IsInRole(User user, string role)
     {
-        return Roles.Any(x => x.Users.Contains(user));
+        return Roles.First(x => x.Name == role).Users.Contains(user);
     }
 
     public async Task<AuthToken> GenerateAuthToken(string username)
@@ -71,7 +71,7 @@ public class AuthService : IAuthService
     {
         var storedToken = await _context.AuthTokens.FirstOrDefaultAsync(x => x.Token == token);
 
-        if (token is null)
+        if (storedToken is null)
             return;
         
         storedToken.ValidTo = DateTime.Now;
