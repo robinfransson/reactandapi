@@ -28,7 +28,7 @@ public class AuthService : IAuthService
 
     public bool IsInRole(User user, string role)
     {
-        return Roles.First(x => x.Name == role).Users.Contains(user);
+        return Roles.Any(x => x.Users.Contains(user));
     }
 
     public async Task<AuthToken> GenerateAuthToken(string username)

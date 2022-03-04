@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Backend.Controllers;
+using Backend.Models;
 using Backend.Models.Interfaces;
 using Database;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +29,10 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
             context.HttpContext.RequestServices.GetService(typeof(IUserService)) is IUserService)
         {
             var authToken = context.HttpContext.Request.Headers["Auth-token"];
+
+            if (string.IsNullOrWhiteSpace(authToken))
+                await SetStatusUnauthorized(context.Controller as ControllerBase);
+            
             var validToken = await authService.CheckValid(authToken);
 
             var user = await authService.GetAuthenticatedUser(authToken);
@@ -43,7 +48,7 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
 
     private bool CheckIfAuthorized(User user, IAuthService authService)
     {
-        if (Roles is null || !Roles.Any())
+        if (Roles is null || !Roles.Any() || user is null)
             return true;
         
         return Roles.Any(x => authService.IsInRole(user, x));
@@ -51,10 +56,8 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
 
     private async Task SetStatusUnauthorized(ControllerBase c)
     {
-        if (Roles is not null)
-        {
-            await c.Response.WriteAsJsonAsync(new { Message = "Not authorized to view this content."});
-        }
         c.Response.StatusCode = 401;
+        await c.Response.WriteAsJsonAsync(new UserServiceStatus() { Message = "Not authorized to view this content.", Status = StatusCode.Error });
+        
     }
 }

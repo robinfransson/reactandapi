@@ -1,5 +1,7 @@
 import React from 'react';
+import { PromiseOr } from 'sass';
 import { authContext } from '../components/AuthContext';
+import { message } from '../views/Register';
 import { useAuth } from './auth';
 
 const BASE_URL: string = '';
@@ -41,8 +43,13 @@ export interface SigninUserCommand {
 class APIRequest {
     constructor() {}
 
+    private baseRequest: RequestInit = {
+        headers: [['Auth-token', sessionStorage.getItem('token') ?? '']],
+    };
+
     async Post<T, T2>(url: string, data: T): Promise<T2> {
         return await fetch(`${BASE_URL}${url}`, {
+            ...this.baseRequest,
             method: 'Post',
             body: JSON.stringify(data),
             headers: {
@@ -56,23 +63,33 @@ class APIRequest {
                     res.headers.get('Auth-token') ?? ''
                 );
             }
-            return res.json();
+            return this.HandleResponse(res);
         });
     }
 
     async Get<T, T2>(path: string, data: T): Promise<T2> {
         const params = new URLSearchParams(data ?? {}).toString();
         const requestUrl = `${BASE_URL}${path}?${params}`;
-        return await fetch(requestUrl)
-            .then((res) => res.json())
+        return await fetch(requestUrl, this.baseRequest)
+            .then(this.HandleResponse)
             .catch(Promise.reject);
     }
 
     async GetNoData<T>(path: string): Promise<T> {
         const requestUrl = `${BASE_URL}${path}`;
-        return await fetch(requestUrl)
-            .then((res) => res.json())
-            .catch(Promise.reject);
+        return await fetch(requestUrl, this.baseRequest).then(
+            this.HandleResponse
+        );
+    }
+
+    async HandleResponse<T>(response: Response): Promise<any> {
+        if (response.status === 401) {
+            var mess = await response.json();
+            message({ ...mess, delay: 3000 });
+            return {} as T;
+        }
+
+        return response.json();
     }
 
     async VerifyToken(): Promise<boolean> {
@@ -123,12 +140,16 @@ export class API {
     }
 
     public static async getProducts(): Promise<ProductData[]> {
-        return await this.instance.GetNoData<ProductData[]>(
+        return await API.instance.GetNoData<ProductData[]>(
             '/api/Home/Products'
         );
     }
 
     public static async getHomeData(): Promise<HomeData> {
-        return await this.instance.GetNoData<HomeData>('/api/Home');
+        return await API.instance.GetNoData<HomeData>('/api/Home');
+    }
+
+    public static async addRole(): Promise<HomeData> {
+        return await API.instance.GetNoData<HomeData>('/api/User/AddRole');
     }
 }

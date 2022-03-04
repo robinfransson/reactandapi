@@ -75,7 +75,6 @@ export function message(info: mess) {
     const messageContainer = document.querySelector('.Message-container')!;
     const messages = info.message.split('\n');
     const message = document.createElement('div');
-    console.log(messages);
     message.classList.add(
         'Message',
         info.status === 0 ? 'Message--success' : 'Message--error'
