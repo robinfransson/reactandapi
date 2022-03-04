@@ -46,6 +46,7 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
             if (!validToken || !authorized)
             {
                 await SetStatusUnauthorized(context.Controller as ControllerBase);
+                return;
             }
         }
 
