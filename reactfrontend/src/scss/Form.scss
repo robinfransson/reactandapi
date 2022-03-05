@@ -1,0 +1,8 @@
+.Container {
+    display: flex;
+    padding: 1rem;
+    border: solid black 2px;
+    max-width: 200px;
+
+    @include screen();
+}

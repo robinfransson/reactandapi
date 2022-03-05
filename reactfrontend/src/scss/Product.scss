@@ -1,7 +1,6 @@
-@use "./variables.scss" as *;
+@use './variables.scss' as *;
 
 .Product-container.grid {
-
     .Product {
         border-radius: 10px;
         border: 2px black solid;
@@ -9,10 +8,9 @@
         display: flex;
         flex-direction: column;
 
-        @include breakpoint(desktop) {
-            
-        width: 12rem;
-        height: 15rem;
+        @include media(desktop) {
+            width: 12rem;
+            height: 15rem;
         }
 
         &-title {
