@@ -6,18 +6,18 @@ using Backend.Models;
 using Backend.Models.Interfaces;
 using Backend.Services;
 using Backend.Validators;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.Controllers;
 
-[ApiController]
 public class UserController : BaseApiController<UserService>
 {
     private readonly IUserService _userService;
     private readonly IAuthService _authService;
 
-    public UserController(IUserService userService, IAuthService authService, ILogger<UserService> logger) : base(logger)
+    public UserController(IUserService userService, IAuthService authService, ILogger<UserService> logger, IHttpContextAccessor contextAccessor) : base(logger, contextAccessor)
     {
         _userService = userService;
         _authService = authService;
@@ -33,16 +33,17 @@ public class UserController : BaseApiController<UserService>
             return BadRequest(result);
         return Ok(result);
     }
-    
-    
-    
-    [HttpGet, Route("AddRole"), AuthorizeUser(Roles = new []{ "Admin" })]
+
+
+    [HttpGet]
+    [Route("AddRole")]
+    [AuthorizeUser(Roles = new[] {"Admin"})]
     public IActionResult AddRole()
     {
         Logger.LogInformation("Added role");
         return Ok(new UserServiceStatus()
         {
-            Message = "You are authorized",
+            Message = $"You are authorized {CurrentUser.Email}",
             Status = Models.StatusCode.Success
         });
     }
@@ -51,7 +52,6 @@ public class UserController : BaseApiController<UserService>
     [HttpGet, Route("Verify"), AuthorizeUser]
     public IActionResult VerifyToken()
     {
-        //invalid token is caught in the AuthorizeUser attribute
         return Ok();
     }
     

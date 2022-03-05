@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Backend.Models;
 using Database;
+using Microsoft.AspNetCore.Http;
 using static WebProject.Config.StaticObjects;
 
 namespace Backend.Controllers;
@@ -12,7 +13,7 @@ public class HomeController : BaseApiController<HomeController>
     private readonly ILogger<HomeController> _logger;
     private readonly LocalDbContext _context;
 
-    public HomeController(ILogger<HomeController> logger, LocalDbContext context) : base(logger)
+    public HomeController(ILogger<HomeController> logger, LocalDbContext context, IHttpContextAccessor httpContextAccessor) : base(logger, httpContextAccessor)
     {
         _logger = logger;
         _context = context;

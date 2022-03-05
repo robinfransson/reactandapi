@@ -25,6 +25,7 @@ builder.Services.AddTransient<CreateUserValidator>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoleManager, RoleManager>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddFluentValidation();
 

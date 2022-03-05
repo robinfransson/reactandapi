@@ -22,10 +22,9 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
     
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        if (context.Controller is not ControllerBase)
+        if (context.Controller is not ControllerBase controller)
             return;
 
-        
         if (context.HttpContext.RequestServices.GetService(typeof(IAuthService)) is IAuthService authService &&
             context.HttpContext.RequestServices.GetService(typeof(IUserService)) is IUserService)
         {
@@ -33,7 +32,7 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
 
             if (string.IsNullOrWhiteSpace(authToken))
             {
-                await SetStatusUnauthorized(context.Controller as ControllerBase);
+                await SetStatusUnauthorized(controller);
                 return;
             }
                 
@@ -45,9 +44,11 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
             
             if (!validToken || !authorized)
             {
-                await SetStatusUnauthorized(context.Controller as ControllerBase);
+                await SetStatusUnauthorized(controller);
                 return;
             }
+            
+            controller.HttpContext.Items["User"] = user;
         }
 
         await next();
