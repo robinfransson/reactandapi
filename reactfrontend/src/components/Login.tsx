@@ -35,14 +35,14 @@ export const Login: React.FC<{}> = () => {
                     onSubmit={handleSubmit(onSubmit)}
                     className={login['Login-form']}
                 >
-                    <div className="Form-group">
+                    <div className={login['Form-group']}>
                         <div className={login['Form-label']}>Email</div>
                         <input
                             className="Form-input"
                             {...register('username')}
                         ></input>
                     </div>
-                    <div className="Form-group">
+                    <div className={login['Form-group']}>
                         <div className={login['Form-label']}>Password</div>
                         <input
                             className="Form-input"

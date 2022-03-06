@@ -1,32 +1,81 @@
 @use './variables.scss' as *;
 
 .Login-main {
-    @include MainContainer();
-    background-color: white;
+    max-width: inherit;
+    max-height: inherit;
+    height: 100%;
     font-size: 1rem;
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
     .Login-form {
+        display: block;
         flex-direction: column;
-        display: inline-flex;
-        justify-self: center;
+        display: flex;
+        padding: 3rem;
+    }
+    .Form-group {
+        margin-bottom: 1rem;
+        padding: 1rem;
     }
     .Form-label {
+        color: $color-white;
+        text-transform: uppercase;
+        font-size: 2rem;
+        letter-spacing: 1px;
         width: 100%;
+        padding-bottom: 0.5rem;
     }
     input {
-        height: 1rem;
-        width: 100%;
+        box-sizing: content-box;
+        height: 3rem;
+        padding: 0.5rem;
+        font-size: 2rem;
+        width: calc(100% - 5px);
         border-radius: 5px;
-        margin-bottom: 0.5rem;
+        border: none;
     }
     button {
+        display: flex;
         align-self: center;
         justify-self: center;
+        height: 3.2rem;
         font-size: 1.2rem;
-        padding: 0 0.4rem;
-        margin: 0.4rem 0;
+        border: none;
+        position: relative;
+        text-align: center;
+        line-height: 3rem;
+        font-size: 2rem;
+        padding: 0.5rem 4rem;
+        background: linear-gradient(
+            to left,
+            $color-blue,
+            $color-pink,
+            $color-blue
+        );
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        &::before {
+            top: 6px;
+            left: 0;
+            position: absolute;
+            content: '';
+            height: 2.9rem;
+            width: 100%;
+            border: 10px solid;
+            border-image-slice: 1;
+            border-width: 3px;
+            border-image-source: linear-gradient(
+                to right,
+                $color-darkpink,
+                $color-pink
+            );
+        }
+
+        &::after {
+        }
     }
 }
