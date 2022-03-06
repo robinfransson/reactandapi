@@ -1,50 +1,49 @@
 import * as React from 'react';
-import { Component } from 'react';
 import { useAuth } from '../scripts/auth';
 import style from '../scss/HeaderMenu.module.scss';
 import { Login } from './Login';
-import { authContext } from '../components/AuthContext';
 import { ProfileMenu } from './ProfileMenu';
 
 export const HeaderMenu = () => {
-    const { authorized } = React.useContext(authContext);
-    const [visible, setVisible] = React.useState(false);
-    let element: HTMLDivElement | null = null;
-    return (
-        <div className={style.HeaderMenu}>
-            <div className={style['HeaderMenu-logo']}>Hej</div>
-            {authorized ? (
-                <>
-                    <div
-                        ref={(ref) => (element = ref)}
-                        className={style['HeaderMenu-profile']}
-                        onClick={(e) => {
-                            if (element === e.target) setVisible((x) => !x);
-                        }}
-                    >
-                        Profile
-                    </div>
-                    <div className={visible ? 'Login-active' : 'Login'}>
-                        <ProfileMenu></ProfileMenu>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <div
-                        ref={(ref) => (element = ref)}
-                        className={style['HeaderMenu-login']}
-                        onClick={(e) => {
-                            if (element === e.target) setVisible((x) => !x);
-                        }}
-                    >
-                        Log in
-                    </div>
+    const { authorized } = useAuth();
+    const [ref, setRef] = React.useState<HTMLDivElement | null>();
+    const [menuRef, setMenuRef] = React.useState<HTMLDivElement | null>();
+    const [ready, setReady] = React.useState(false);
+    const [visible, setVisible] = React.useState(true);
 
-                    <div className={visible ? 'Login-active' : 'Login'}>
-                        <Login></Login>
-                    </div>
-                </>
-            )}
+    React.useEffect(() => {
+        console.log('adding event');
+        document.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log('clicked');
+            if (!menuRef?.contains(e.target as Element) && visible) {
+                setVisible((old) => !old);
+            }
+        });
+    }, [ready]);
+
+    React.useEffect(() => {
+        if (ref && menuRef) {
+            setReady(true);
+            console.log('ready:', ready);
+        }
+    }, [ref, menuRef]);
+
+    return (
+        <div className={style.HeaderMenu} ref={(ref) => setMenuRef(ref)}>
+            <div className={style['HeaderMenu-logo']}>Hej</div>
+            <div
+                className={
+                    visible
+                        ? style['HeaderMenu-modal-active']
+                        : style['HeaderMenu-modal']
+                }
+                ref={(ref) => setRef(ref)}
+            >
+                {authorized && <ProfileMenu />}
+                {!authorized && <Login />}
+            </div>
         </div>
     );
 };

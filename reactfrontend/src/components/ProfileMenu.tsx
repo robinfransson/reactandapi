@@ -14,14 +14,16 @@ export const ProfileMenu = () => {
         console.log('authorized: ', authorized);
     }, [authorized]);
     return (
-        <div className="ProfileMenu">
-            {'' + authorized}
-            <div className="ProfileMenu-logout" onClick={logClick}>
-                Log out
+        <>
+            <div className="ProfileMenu">
+                {'' + authorized}
+                <div className="ProfileMenu-logout" onClick={logClick}>
+                    Log out
+                </div>
+                <button type="button" onClick={API.addRole}>
+                    Click me
+                </button>
             </div>
-            <button type="button" onClick={API.addRole}>
-                Click me
-            </button>
-        </div>
+        </>
     );
 };
