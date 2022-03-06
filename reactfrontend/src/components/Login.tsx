@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { API, CreateUserResult, SigninUserCommand } from '../scripts/api';
 import { message } from '../views/Register';
 import { authContext } from './AuthContext';
-import '../scss/Login.scss';
+import login from '../scss/Login.module.scss';
 
 export const Login: React.FC<{}> = () => {
     const { register, handleSubmit } = useForm<SigninUserCommand>();

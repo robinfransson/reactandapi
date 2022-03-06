@@ -4,8 +4,9 @@
     border: solid black 2px;
 
     @include MainContainer();
+}
 
-    @include screen(lg) {
-        max-width: 200px;
-    }
+.Page-main {
+    height: 100%;
+    padding: 5rem 2rem;
 }

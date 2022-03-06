@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { useAuth } from '../scripts/auth';
-import '../scss/HeaderMenu.scss';
+import style from '../scss/HeaderMenu.module.scss';
 import { Login } from './Login';
 import { authContext } from '../components/AuthContext';
 import { ProfileMenu } from './ProfileMenu';
@@ -11,13 +11,13 @@ export const HeaderMenu = () => {
     const [visible, setVisible] = React.useState(false);
     let element: HTMLDivElement | null = null;
     return (
-        <div className="HeaderMenu">
-            <div className="HeaderMenu-logo">Hej</div>
+        <div className={style.HeaderMenu}>
+            <div className={style['HeaderMenu-logo']}>Hej</div>
             {authorized ? (
                 <>
                     <div
                         ref={(ref) => (element = ref)}
-                        className="HeaderMenu-login"
+                        className={style['HeaderMenu-profile']}
                         onClick={(e) => {
                             if (element === e.target) setVisible((x) => !x);
                         }}
@@ -32,7 +32,7 @@ export const HeaderMenu = () => {
                 <>
                     <div
                         ref={(ref) => (element = ref)}
-                        className="HeaderMenu-login"
+                        className={style['HeaderMenu-login']}
                         onClick={(e) => {
                             if (element === e.target) setVisible((x) => !x);
                         }}

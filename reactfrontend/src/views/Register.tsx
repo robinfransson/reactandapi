@@ -9,7 +9,7 @@ import {
     CreateUserResult,
     SigninUserCommand,
 } from '../scripts/api';
-import '../scss/Register.scss';
+import styles from '../scss/Register.module.scss';
 
 export const Register: React.FC<{}> = () => {
     const { register, handleSubmit } = useForm<CreateUserCommand>();
@@ -26,7 +26,7 @@ export const Register: React.FC<{}> = () => {
             message(m);
         }
     }, [result]);
-    const { authorized, setToken } = React.useContext(authContext);
+    const { authorized } = React.useContext(authContext);
 
     const onSubmit = async (data: CreateUserCommand) => {
         API.createUser(data).then((res) => {
@@ -40,7 +40,7 @@ export const Register: React.FC<{}> = () => {
     return (
         <>
             {authorized ? <>Authed</> : <>Not authed</>}
-            <div className="Register-main">
+            <div className={styles['Register-main']}>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="Register-form"
