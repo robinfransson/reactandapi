@@ -3,7 +3,11 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { authContext } from '../components/AuthContext';
-import { API, CreateUserCommand, CreateUserResult } from '../scripts/api';
+import { API } from '../scripts/api';
+import {
+    CreateUserCommand,
+    CreateUserResult,
+} from '../scripts/interfaces/interfaces';
 import styles from '../scss/Register.module.scss';
 
 export const Register: React.FC<{}> = () => {

@@ -1,22 +1,18 @@
-import React, { useContext, useEffect } from 'react';
-import { authContext } from './AuthContext';
+import React, { useEffect } from 'react';
 import { API } from '../scripts/api';
+import { useAuth } from '../scripts/auth';
 
-export const ProfileMenu = () => {
-    const { authorized, setToken } = useContext(authContext);
+export const ProfileMenu: React.FC<{}> = () => {
+    const { setToken } = useAuth();
 
     const logClick = () => {
         setToken!('');
         window.sessionStorage.setItem('token', '');
         console.log('clicked');
     };
-    useEffect(() => {
-        console.log('authorized: ', authorized);
-    }, [authorized]);
     return (
         <>
             <div className="ProfileMenu">
-                {'' + authorized}
                 <div className="ProfileMenu-logout" onClick={logClick}>
                     Log out
                 </div>

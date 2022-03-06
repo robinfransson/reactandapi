@@ -1,26 +1,12 @@
-.Login {
-    display: none;
-
-    &-active {
-        display: flex;
-        position: absolute;
-        border: 1px black solid;
-        border-top: 0px;
-        background-color: white;
-        padding: 1rem;
-        right: 0.5rem;
-        top: 2.9rem;
-        width: 10rem;
-        box-shadow: 10px 6px 5px 1px rgb(0 0 0 / 0.2);
-        border-radius: 0px 0px 5px 5px;
-    }
-}
+@use './variables.scss' as *;
 
 .Login-main {
+    @include MainContainer();
+    background-color: white;
     font-size: 1rem;
     display: inline-flex;
-    width: 100%;
     flex-direction: column;
+    align-items: center;
 
     .Login-form {
         flex-direction: column;
@@ -42,17 +28,5 @@
         font-size: 1.2rem;
         padding: 0 0.4rem;
         margin: 0.4rem 0;
-    }
-}
-
-.ProfileMenu {
-    font-size: 1rem;
-
-    &-logout {
-        cursor: pointer;
-
-        &:hover {
-            text-decoration: underline;
-        }
     }
 }

@@ -7,6 +7,10 @@ export const Layout = () => {
     return (
         <>
             <div
+                className={mainStyle['Modal-container']}
+                id="modal-container"
+            ></div>
+            <div
                 className={mainStyle['Message-container']}
                 id="message-container"
             ></div>

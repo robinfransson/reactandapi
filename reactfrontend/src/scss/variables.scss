@@ -8,13 +8,6 @@
 
 $breakpoints: 'xl', 'lg', 'md', 'sm', 'xs';
 
-$media-xl: 'only screen and (min-width: 1200px)';
-$media-desktop: 'only screen and (min-width: 992px)';
-$media-tablet: 'only screen and (min-width: 768px)';
-$media-mobile: 'only screen and (min-width: 576px)';
-$media-mobile-sm: 'only screen and (min-width : 480px)';
-$columns: 12;
-
 //colors
 
 $color-darkblue: #242582;
@@ -22,7 +15,6 @@ $color-blue: #2f2fa2;
 $color-pink: #f64c72;
 $color-lightbrown: #99738e;
 $color-darkbrown: #553d67;
-$color-pink: #f64c72;
 $color-white: #f8f1f1;
 
 @mixin MainContainer() {
@@ -50,20 +42,6 @@ $color-white: #f8f1f1;
     } @else if $point == xs {
         @media (max-width: 37.5em) {
             @content;
-        }
-    }
-}
-
-@mixin col-list {
-    @each $bp in $breakpoints {
-        @for $i from 1 through $columns {
-            .col-#{$bp}-#{$i}of12 {
-                @include screen(#{$bp}) {
-                    $width: math.percentage(calc(12 / $i * 12));
-                    @debug $width;
-                    width: $width;
-                }
-            }
         }
     }
 }

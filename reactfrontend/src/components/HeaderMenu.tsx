@@ -1,49 +1,51 @@
 import * as React from 'react';
 import { useAuth } from '../scripts/auth';
 import style from '../scss/HeaderMenu.module.scss';
+import { authContext } from './AuthContext';
 import { Login } from './Login';
+import { Modal } from './Modal';
 import { ProfileMenu } from './ProfileMenu';
 
 export const HeaderMenu = () => {
-    const { authorized } = useAuth();
-    const [ref, setRef] = React.useState<HTMLDivElement | null>();
-    const [menuRef, setMenuRef] = React.useState<HTMLDivElement | null>();
-    const [ready, setReady] = React.useState(false);
-    const [visible, setVisible] = React.useState(true);
+    const [visible, setVisible] = React.useState(false);
+    const toggleVisible = () => {
+        setVisible((old) => !old);
+    };
+    const { authorized } = React.useContext(authContext);
+    React.useEffect(() => {
+        console.log('(headermeny) authorized: ', authorized);
+    }, [authorized]);
 
     React.useEffect(() => {
-        console.log('adding event');
-        document.addEventListener('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            console.log('clicked');
-            if (!menuRef?.contains(e.target as Element) && visible) {
-                setVisible((old) => !old);
-            }
-        });
-    }, [ready]);
-
-    React.useEffect(() => {
-        if (ref && menuRef) {
-            setReady(true);
-            console.log('ready:', ready);
-        }
-    }, [ref, menuRef]);
+        console.log('authorized: ', authorized);
+    }, [authorized]);
 
     return (
-        <div className={style.HeaderMenu} ref={(ref) => setMenuRef(ref)}>
+        <div className={style.HeaderMenu} id="headermenu">
             <div className={style['HeaderMenu-logo']}>Hej</div>
-            <div
-                className={
-                    visible
-                        ? style['HeaderMenu-modal-active']
-                        : style['HeaderMenu-modal']
-                }
-                ref={(ref) => setRef(ref)}
-            >
-                {authorized && <ProfileMenu />}
-                {!authorized && <Login />}
-            </div>
+            {authorized ? (
+                <>
+                    <div className="" onClick={toggleVisible}>
+                        Profile
+                    </div>
+                    {visible && (
+                        <Modal toggle={toggleVisible}>
+                            <ProfileMenu />
+                        </Modal>
+                    )}
+                </>
+            ) : (
+                <>
+                    <div className="" onClick={toggleVisible}>
+                        Log in
+                    </div>
+                    {visible && (
+                        <Modal toggle={toggleVisible}>
+                            <Login />
+                        </Modal>
+                    )}
+                </>
+            )}
         </div>
     );
 };
