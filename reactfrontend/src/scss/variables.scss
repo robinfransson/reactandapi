@@ -14,7 +14,16 @@ $media-tablet: 'only screen and (min-width: 768px)';
 $media-mobile: 'only screen and (min-width: 576px)';
 $media-mobile-sm: 'only screen and (min-width : 480px)';
 $columns: 12;
-$test: 'test';
+
+//colors
+
+$color-darkblue: #242582;
+$color-blue: #2f2fa2;
+$color-pink: #f64c72;
+$color-lightbrown: #99738e;
+$color-darkbrown: #553d67;
+$color-pink: #f64c72;
+$color-white: #f8f1f1;
 
 @mixin MainContainer() {
     width: 100%;

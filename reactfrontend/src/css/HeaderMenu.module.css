@@ -40,5 +40,11 @@
   user-select: none;
   font-size: 4rem !important;
 }
+.HeaderMenu-modal:not(:first-child) {
+  display: none;
+}
+.HeaderMenu-modal-active:not(:first-child) {
+  display: flex;
+}
 
 /*# sourceMappingURL=HeaderMenu.module.css.map */

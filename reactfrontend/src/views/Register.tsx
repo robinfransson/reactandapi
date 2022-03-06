@@ -3,12 +3,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { authContext } from '../components/AuthContext';
-import {
-    API,
-    CreateUserCommand,
-    CreateUserResult,
-    SigninUserCommand,
-} from '../scripts/api';
+import { API, CreateUserCommand, CreateUserResult } from '../scripts/api';
 import styles from '../scss/Register.module.scss';
 
 export const Register: React.FC<{}> = () => {
@@ -72,14 +67,14 @@ interface mess {
     delay: number;
 }
 export function message(info: mess) {
-    const messageContainer = document.querySelector('.Message-container')!;
+    const messageContainer = document.querySelector('[id=message-container]')!;
     const messages = info.message.split('\n');
     const message = document.createElement('div');
     message.classList.add(
         'Message',
         info.status === 0 ? 'Message--success' : 'Message--error'
     );
-    messages.forEach((x, index) => {
+    messages.forEach((x) => {
         const child = document.createElement('div');
         child.classList.add('Message-text');
         child.innerHTML = x;

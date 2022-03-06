@@ -43,4 +43,16 @@
         user-select: none;
         font-size: 4rem !important;
     }
+
+    &-modal {
+        &:not(:first-child) {
+            display: none;
+        }
+
+        &-active {
+            &:not(:first-child) {
+                display: flex;
+            }
+        }
+    }
 }
