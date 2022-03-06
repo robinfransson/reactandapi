@@ -5,6 +5,7 @@ import modal from '../scss/Modal.module.scss';
 
 export const Modal: React.FC<ModalOptions> = ({ children, toggle }) => {
     const [ref, setRef] = React.useState<HTMLDivElement | null>();
+    const [closeRef, setCloseRef] = React.useState<HTMLSpanElement | null>();
 
     React.useEffect(() => {
         if (ref) {
@@ -21,7 +22,13 @@ export const Modal: React.FC<ModalOptions> = ({ children, toggle }) => {
 
     return ReactDOM.createPortal(
         <div className={modal.Modal} ref={setRef}>
-            <div className={modal['Modal-content']}>{children}</div>
+            <div className={modal['Modal-content']}>
+                <div
+                    className={modal['Modal-closeButton']}
+                    onClick={toggle}
+                ></div>
+                {children}
+            </div>
         </div>,
         document.querySelector('[id="modal-container"]')!
     );

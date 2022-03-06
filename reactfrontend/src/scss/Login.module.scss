@@ -17,7 +17,7 @@
         padding: 3rem;
     }
     .Form-group {
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
         padding: 1rem;
     }
     .Form-label {
@@ -57,6 +57,7 @@
         );
         background-clip: text;
         -webkit-text-fill-color: transparent;
+        cursor: pointer;
 
         &::before {
             top: 6px;
@@ -73,9 +74,6 @@
                 $color-darkpink,
                 $color-pink
             );
-        }
-
-        &::after {
         }
     }
 }
